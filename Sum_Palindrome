@@ -1,0 +1,49 @@
+// ✅ Question:
+// Check if the sum of digits of a number is a palindrome.
+//
+// Given a number `n`, find the sum of its digits.
+// Then, check if that sum is a palindrome number.
+// Return true if it is, otherwise return false.
+//
+// Example:
+// Input: 56
+// Sum of digits = 5 + 6 = 11 → Not a palindrome → return false
+// Input: 121
+// Sum of digits = 1 + 2 + 1 = 4 → Palindrome → return true
+
+// ✅ Approach:
+// 1. Extract and sum the digits of the number.
+// 2. Reverse the digit sum.
+// 3. Compare the reversed sum with the original sum.
+//    - If equal, it's a palindrome → return true.
+//    - Otherwise → return false.
+
+Code :
+// User function Template for Java
+
+class Solution {
+    boolean isDigitSumPalindrome(int n) {
+        // code here
+        int temp=n;
+        int sum=0;
+        while(temp>0)
+        {
+            int rem=temp%10;
+            sum+=rem;
+            temp=temp/10;
+        }
+        
+        int temp2=sum;
+        int rev=0;
+        while(temp2>0)
+        {
+            int digit=temp2%10;
+            rev=rev*10+digit;
+            temp2=temp2/10;
+        }
+        
+        if(sum==rev) return true;
+        
+        return false;
+    }
+}
