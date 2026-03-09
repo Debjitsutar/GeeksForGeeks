@@ -1,0 +1,35 @@
+
+class Solution {
+    void dfs(int V, ArrayList<ArrayList<Integer>> adj,boolean vs[])
+    {
+        vs[V]=true;
+        for(int nei : adj.get(V))
+        {
+            if(!vs[nei]) dfs(nei,adj,vs);
+        }
+    }
+    // Function to find a Mother Vertex in the Graph.
+    public int findMotherVertex(int V, ArrayList<ArrayList<Integer>> adj) {
+        // Code here
+        boolean vs[]=new boolean[V];
+        int c=-1;
+        
+        for(int i=0;i<V;i++)
+        {
+            if(!vs[i])
+            {
+                dfs(i,adj,vs);
+                c=i;
+            }
+        }
+        
+        vs=new boolean[V];
+        dfs(c,adj,vs);
+        
+        for(int i=0;i<V;i++)
+        {
+            if(!vs[i]) return -1;
+        }
+        return c;
+    }
+}
