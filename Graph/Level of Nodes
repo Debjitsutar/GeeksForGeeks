@@ -1,0 +1,66 @@
+// ✅ Question:
+// Find the level of a given node X in an undirected graph.
+//
+// The graph contains V vertices represented using an adjacency list adj.
+// The level of a node is defined as the minimum number of edges
+// from the starting node (node 0) to that node.
+//
+// Return the level of node X.
+// If node X is not reachable from node 0, return -1.
+
+
+// ✅ Approach:
+// 1. Use Breadth First Search (BFS) starting from node 0.
+// 2. Maintain a visited array to avoid revisiting nodes.
+// 3. Use a queue to store pairs of (node, level).
+// 4. Initially push node 0 with level 0 into the queue.
+// 5. While the queue is not empty:
+//    - Remove the front element.
+//    - If the current node equals X, return its level.
+// 6. For each neighbor of the current node:
+//    - If it has not been visited, mark it visited.
+//    - Add it to the queue with level + 1.
+// 7. If BFS completes and node X is not found, return -1.
+
+
+// ✅ Complexity:
+//
+// Time Complexity: O(V + E)
+// BFS traversal visits every vertex and edge at most once.
+//
+// Space Complexity: O(V)
+// For the visited array and queue used in BFS.
+/*Complete the function below*/
+
+
+// ✅ Code:
+class Solution {
+    // Function to find the level of node X.
+    int nodeLevel(int V, ArrayList<ArrayList<Integer>> adj, int X) {
+        // code here
+        boolean vs[]=new boolean[V];
+        Queue<int[]> q=new LinkedList<>();
+        
+        q.add(new int[]{0,0});
+        vs[0]=true;
+        
+        while(!q.isEmpty())
+        {
+            int cur[]=q.poll();
+            int node=cur[0];
+            int level=cur[1];
+            
+            if(node==X) return level;
+            
+            for(int nei : adj.get(node))
+            {
+                if(!vs[nei])
+                {
+                    vs[nei]=true;
+                    q.add(new int[]{nei,level+1});
+                }
+            }
+        }
+        return -1;
+    }
+}
