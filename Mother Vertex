@@ -1,4 +1,46 @@
+/*
+Question:
+Given a directed graph with V vertices and an adjacency list adj,
+find a Mother Vertex.
 
+A Mother Vertex is a vertex from which all other vertices in the graph
+can be reached through directed paths.
+
+If such a vertex exists, return its index.
+Otherwise, return -1.
+
+
+Approach:
+The solution uses Depth First Search (DFS).
+
+1. Create a visited array to keep track of visited vertices.
+
+2. Traverse all vertices from 0 to V-1.
+   If a vertex is not visited, perform DFS from that vertex.
+
+3. The last vertex from which DFS is initiated becomes the
+   potential candidate for the Mother Vertex.
+
+4. Reset the visited array.
+
+5. Perform DFS again starting from the candidate vertex.
+
+6. After DFS, check if all vertices are visited:
+   - If all vertices are visited, the candidate is the Mother Vertex.
+   - If any vertex remains unvisited, return -1.
+
+The reasoning is that if a Mother Vertex exists,
+it must be the last finished vertex in DFS traversal.
+
+
+Complexity:
+
+Time Complexity: O(V + E)
+DFS traversal takes O(V + E) and it runs at most twice.
+
+Space Complexity: O(V)
+For the visited array and recursion stack.
+*/
 class Solution {
     void dfs(int V, ArrayList<ArrayList<Integer>> adj,boolean vs[])
     {
