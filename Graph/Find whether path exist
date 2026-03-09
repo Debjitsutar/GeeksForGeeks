@@ -1,0 +1,89 @@
+// ✅ Question:
+// Check whether a path exists from Source to Destination in a grid.
+//
+// The grid contains the following values:
+// 0 → Blocked cell (cannot pass through)
+// 1 → Source cell
+// 2 → Destination cell
+// 3 → Blank cell (can move through)
+//
+// From a cell, movement is allowed in four directions:
+// up, down, left, and right.
+//
+// Return true if there exists a path from the Source (1)
+// to the Destination (2). Otherwise, return false.
+
+
+// ✅ Approach:
+// 1. Traverse the grid to locate the Source cell (value = 1).
+// 2. Use Depth First Search (DFS) with a stack to explore possible paths.
+// 3. Maintain a visited matrix to avoid revisiting cells.
+// 4. Push the source cell into the stack.
+// 5. While the stack is not empty:
+//    - Pop the current cell.
+//    - If the cell value is 2, the destination is reached → return true.
+// 6. Explore all four possible directions (up, down, left, right).
+// 7. For each neighbor cell:
+//    - Check if it is inside the grid boundaries.
+//    - Ensure the cell is not blocked (grid value ≠ 0).
+//    - Ensure it has not been visited.
+//    - Push the valid neighbor into the stack.
+// 8. If traversal finishes without reaching the destination,
+//    return false.
+
+
+// ✅ Complexity:
+//
+// Time Complexity: O(N × M)
+// Each cell in the grid is visited at most once.
+//
+// Space Complexity: O(N × M)
+// For the visited matrix and stack used in DFS.
+
+// ✅ Code:
+class Solution {
+    // Function to find whether a path exists from the source to destination.
+    public boolean is_Possible(int[][] grid) {
+        // Code here
+        int n=grid.length;
+        int m=grid[0].length;
+        
+        int sx=-1,sy=-1;
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<m;j++)
+            {
+                if(grid[i][j]==1)
+                {
+                    sx=i;
+                    sy=j;
+                }
+            }
+        }
+        
+        Stack<int[]> st=new Stack<>();
+        boolean vs[][]=new boolean[n][m];
+        st.push(new int[]{sx,sy});
+        
+        int dx[]={1,-1,0,0};
+        int dy[]={0,0,1,-1};
+        
+        while(!st.isEmpty())
+        {
+            int cur[]=st.pop();
+            int x=cur[0];
+            int y=cur[1];
+            
+            if(grid[x][y]==2) return true;
+            
+            vs[x][y]=true;
+            for(int d=0;d<4;d++)
+            {
+                int nx=x+dx[d];
+                int ny=y+dy[d];
+                if(nx>=0 && ny>=0 && nx<n &&ny<m && grid[nx][ny]!=0 && !vs[nx][ny]) st.push(new int[]{nx,ny});
+            }
+        }
+        return false;
+    }
+}
