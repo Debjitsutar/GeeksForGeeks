@@ -1,0 +1,130 @@
+// ✅ Question:
+// Given a weighted graph with V vertices and a list of edges,
+// find the shortest distance from the source vertex to all
+// other vertices using Dijkstra’s Algorithm.
+//
+// Each edge is represented as:
+// {u, v, w}
+//
+// where:
+// u → starting node
+// v → ending node
+// w → weight of the edge
+//
+// The graph may be directed or undirected depending on the problem.
+//
+// Return an array dist[] where:
+// dist[i] represents the shortest distance from the source node
+// to vertex i.
+//
+// Note:
+// Dijkstra’s algorithm works only when all edge weights are
+// non-negative.
+
+// ✅ Approach (Using Priority Queue / Min Heap):
+//
+// 1. Convert the edge list into an adjacency list.
+//    This allows efficient traversal of neighbors.
+//
+// 2. Create a distance array dist[] of size V.
+//    Initialize all values with infinity.
+//
+// 3. Set the distance of the source node to 0
+//    because the distance from the source to itself is zero.
+//
+// 4. Use a Priority Queue (Min Heap) to always process
+//    the node with the smallest known distance.
+//
+// 5. Store elements in the priority queue as:
+//    {currentDistance, node}
+//
+// 6. Insert the source node into the priority queue.
+//
+// 7. While the priority queue is not empty:
+//
+//      - Remove the node with the minimum distance.
+//
+//      - Traverse all its adjacent nodes.
+//
+//      - For each neighbor:
+//
+//          a) Calculate the new distance:
+//             newDist = currentDistance + edgeWeight
+//
+//          b) If newDist is smaller than the stored distance:
+//
+//                • Update the distance array.
+//                • Insert the updated node into the priority queue.
+//
+// 8. Continue this process until the priority queue becomes empty.
+//
+// 9. At the end, the distance array will contain the
+//    shortest distance from the source node to all
+//    other vertices in the graph.
+
+// ✅ Complexity:
+//
+// Time Complexity: O((V + E) log V)
+//
+// Explanation:
+// Each vertex and edge may be processed,
+// and every insertion/removal from the priority queue
+// costs log V time.
+//
+// Space Complexity: O(V + E)
+//
+// Explanation:
+// Additional space is used for:
+// - Adjacency list
+// - Distance array
+// - Priority queue
+
+
+// ✅ Code:
+class Solution {
+    public int[] dijkstra(int V, int[][] edges, int src) {
+        // code here
+        ArrayList<ArrayList<int[]>> adj=new ArrayList<>();
+        
+        for(int i=0;i<V;i++) adj.add(new ArrayList<>());
+        
+        for(int e[] : edges)
+        {
+            int u=e[0];
+            int v=e[1];
+            int w=e[2];
+            
+            adj.get(u).add(new int[]{v,w});
+            adj.get(v).add(new int[]{u,w});
+            
+        }
+        
+        int dist[]=new int[V];
+        Arrays.fill(dist,Integer.MAX_VALUE);
+        
+        dist[src]=0;
+        
+        PriorityQueue<int[]> pq=new PriorityQueue<>((a,b)->a[0]-b[0]);
+        pq.add(new int[]{0,src});
+        
+        while(!pq.isEmpty())
+        {
+            int cur[]=pq.poll();
+            int d=cur[0];
+            int node=cur[1];
+            
+            for(int it[]: adj.get(node))
+            {
+                int adjNode=it[0];
+                int weight=it[1];
+                
+                if(d+weight<dist[adjNode])
+                {
+                    dist[adjNode]=d+weight;
+                    pq.add(new int[]{dist[adjNode],adjNode});
+                }
+            }
+        }
+        return dist;
+    }
+}
