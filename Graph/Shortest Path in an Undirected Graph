@@ -1,0 +1,130 @@
+// ✅ Question:
+// Find the shortest path between vertex 1 and vertex n in a weighted
+// undirected graph.
+//
+// The graph has n vertices and m edges. Each edge is represented as:
+// {u, v, w} where u and v are vertices and w is the weight of the edge.
+//
+// If a path exists from node 1 to node n:
+// return a list where
+// - the first element is the total weight of the shortest path
+// - the remaining elements are the nodes forming the path from 1 to n.
+//
+// If no path exists, return a list containing only {-1}.
+
+// ✅ Approach:
+//
+// 1. Use Dijkstra’s Algorithm because the graph is weighted and we need
+//    the shortest distance.
+//
+// 2. Build an adjacency list to represent the graph where each entry
+//    stores {neighbor, weight}.
+//
+// 3. Maintain a distance array where dist[i] represents the minimum
+//    distance from node 1 to node i.
+//
+// 4. Maintain a parent array to store the previous node of each vertex.
+//    This helps reconstruct the shortest path later.
+//
+// 5. Initialize all distances as infinity and set dist[1] = 0.
+//
+// 6. Use a Priority Queue (Min Heap) storing {distance, node}
+//    so the node with the smallest distance is processed first.
+//
+// 7. While the priority queue is not empty:
+//    - Remove the node with the smallest distance.
+//    - Traverse all its adjacent nodes.
+//    - If a shorter distance to a neighbor is found,
+//      update its distance and parent and push it into the queue.
+//
+// 8. After the algorithm completes:
+//    - If dist[n] is still infinity, node n is unreachable → return {-1}.
+//
+// 9. Otherwise reconstruct the path by backtracking from node n using
+//    the parent array until node 1 is reached.
+//
+// 10. Reverse the path to get the correct order from 1 to n.
+//
+// 11. Return a list containing:
+//     total shortest distance followed by the nodes in the path.
+
+
+// ✅ Complexity:
+//
+// Time Complexity: O(M log N)
+//
+// Dijkstra’s algorithm processes each edge using a priority queue,
+// leading to a complexity of O(M log N).
+//
+// Space Complexity: O(N + M)
+//
+// - Adjacency list stores all edges.
+// - Distance and parent arrays store information for each vertex.
+// - Priority queue stores nodes during processing.
+
+// ✅ Code:
+class Solution {
+    public List<Integer> shortestPath(int n, int m, int edges[][]) {
+        //  Code Here.
+        ArrayList<ArrayList<int[]>> adj=new ArrayList<>();
+        
+        for(int i=0;i<=n;i++) adj.add(new ArrayList<>());
+        
+        for(int e[] : edges)
+        {
+            int u=e[0];
+            int v=e[1];
+            int w=e[2];
+            
+            adj.get(u).add(new int[]{v,w});
+            adj.get(v).add(new int[]{u,w});
+        }
+        
+        PriorityQueue<int[]> pq=new PriorityQueue<>((a,b)->a[0]-b[0]);
+        
+        int dist[]=new int[n+1];
+        int parent[]=new int[n+1];
+        
+        Arrays.fill(dist,Integer.MAX_VALUE);
+        
+        for(int i=0;i<=n;i++) parent[i]=i;
+        dist[1]=0;
+        pq.add(new int[]{0,1});
+        
+        while(!pq.isEmpty())
+        {
+            int cur[]=pq.poll();
+            int d=cur[0];
+            int node=cur[1];
+            
+            for(int it[] : adj.get(node))
+            {
+                int adjNode=it[0];
+                int wt=it[1];
+                
+                if(d+wt<dist[adjNode])
+                {
+                    dist[adjNode]=d+wt;
+                    pq.add(new int[]{dist[adjNode],adjNode});
+                    parent[adjNode]=node;
+                }
+            }
+        }
+        if(dist[n]==Integer.MAX_VALUE) return Arrays.asList(-1);
+        
+        List<Integer> path=new ArrayList<>();
+        int node=n;
+        while(parent[node]!=node)
+        {
+            path.add(node);
+            node=parent[node];
+        }
+        path.add(1);
+        Collections.reverse(path);
+        List<Integer> ans=new ArrayList<>();
+        ans.add(dist[n]);
+        ans.addAll(path);
+        
+        return ans;
+    }
+}
